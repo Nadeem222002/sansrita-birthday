@@ -17,7 +17,9 @@
         .candles {
             display: flex;
             justify-content: center;
-            margin-top: 20%;
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
         }
         .candle {
             width: 30px;
@@ -48,6 +50,8 @@
             width: 100%;
             font-size: 2em;
             text-shadow: 2px 2px black;
+            opacity: 0;
+            transition: opacity 2s;
         }
         .balloon {
             position: absolute;
@@ -56,17 +60,16 @@
             height: 80px;
             background: red;
             border-radius: 50% 50% 45% 45%;
-            left: calc(50% - 30px);
-            animation: float 5s ease-out forwards;
+            animation: float 5s ease-out infinite;
         }
         @keyframes float {
             0% { transform: translateY(0); }
-            100% { transform: translateY(-600px); }
+            100% { transform: translateY(-100vh); }
         }
     </style>
 </head>
 <body>
-    <div class="message">Wishing you a day as magical as you are! May your dreams float higher than these balloons and your happiness shine brighter than these candles! 🎊 Happy Birthday, Sansrita! 🎉🎂🎈</div>
+    <div class="message" id="birthdayMessage">Wishing you a day as magical as you are! May your dreams float higher than these balloons and your happiness shine brighter than these candles! 🎊 Happy Birthday, Sansrita! 🎉🎂🎈</div>
     <div class="candles">
         <div class="candle"><div class="flame"></div></div>
         <div class="candle"><div class="flame"></div></div>
@@ -92,6 +95,7 @@
                         document.querySelectorAll('.flame').forEach(flame => flame.style.display = 'none');
                         document.getElementById('birthdaySong').play();
                         releaseBalloons();
+                        document.getElementById('birthdayMessage').style.opacity = 1;
                     } else {
                         requestAnimationFrame(checkBlow);
                     }
@@ -103,13 +107,14 @@
         }
 
         function releaseBalloons() {
-            for (let i = 0; i < 20; i++) {
+            setInterval(() => {
                 const balloon = document.createElement('div');
                 balloon.className = 'balloon';
                 balloon.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
                 balloon.style.left = `${Math.random() * window.innerWidth}px`;
                 document.body.appendChild(balloon);
-            }
+                setTimeout(() => balloon.remove(), 6000);
+            }, 300);
         }
 
         getMicrophonePermission();
