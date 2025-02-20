@@ -6,11 +6,11 @@
     <title>Happy Birthday Sansrita!</title>
     <style>
         body {
-            background: url('your-image.jpg') no-repeat center center/cover;
+            background: url('birthday-celebration.jpg') no-repeat center center/cover; background-size: cover; height: 100vh; width: 100vw; no-repeat center center/cover;
             text-align: center;
             overflow: hidden;
         }
-        .message {
+        .message, .final-message {
             position: absolute;
             top: 40%;
             width: 100%;
@@ -19,6 +19,11 @@
             text-shadow: 2px 2px 10px black;
             opacity: 0;
             animation: fadeIn 3s forwards 5s;
+        }
+        .final-message {
+            top: 60%;
+            font-size: 2em;
+            animation-delay: 10s;
         }
         @keyframes fadeIn {
             to { opacity: 1; }
@@ -54,12 +59,15 @@
     </style>
 </head>
 <body>
-    <audio id="bgMusic" src="happy-birthday.mp3" loop></audio>
-    <div class="cake">🎂<span id="candles">🕯️🕯️🕯️</span></div>
+    <audio id="bgMusic" src="happy-birthday.mp3" loop autoplay></audio>
+    <div class="cake">🎂<span id="candles">🕯️ 🕯️ 🕯️</span></div>
     <div class="message">Happy Birthday Sansrita!</div>
+    <div class="final-message">Wishing you a day as magical as you are! May your dreams float higher than these balloons and your happiness shine brighter than these candles! 🎊</div>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("bgMusic").play();
+            document.getElementById("bgMusic").play().catch(() => {
+                console.log("Autoplay blocked");
+            });
             navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
                 const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
                 recognition.start();
@@ -71,6 +79,8 @@
                         launchBalloons();
                     }
                 };
+            }).catch(error => {
+                console.log("Microphone permission denied", error);
             });
         });
 
@@ -86,16 +96,24 @@
         }
 
         function launchBalloons() {
-            const text = "Happy Birthday Sansrita".split("");
-            text.forEach((letter, i) => {
-                setTimeout(() => {
-                    let balloon = document.createElement("div");
-                    balloon.className = "balloon";
-                    balloon.innerText = letter;
-                    balloon.style.left = Math.random() * 90 + "vw";
-                    balloon.style.animationDelay = i * 0.2 + "s";
-                    document.body.appendChild(balloon);
-                }, i * 500);
+    const text = "Happy Birthday Sansrita".split(" ");
+    text.forEach((letter, i) => {
+        setTimeout(() => {
+            let balloon = document.createElement("div");
+            balloon.className = "balloon";
+            balloon.innerText = letter;
+            balloon.style.left = Math.random() * 90 + "vw";
+            balloon.style.animationDelay = i * 0.2 + "s";
+            balloon.style.position = "absolute";
+            balloon.style.bottom = "0";
+            balloon.style.color = "red";
+            document.body.appendChild(balloon);
+            setTimeout(() => balloon.remove(), 5000);
+        }, i * 500);
+    });
+}, i * 500);
+    });
+}, i * 500);
             });
         }
     </script>
